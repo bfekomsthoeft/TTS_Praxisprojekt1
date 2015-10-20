@@ -1,0 +1,130 @@
+<?php
+#CodevTT_BEGIN
+# Custom Relationships
+$s_rel_constrained_by = 'constrained by';
+$s_email_notification_title_for_action_constrained_by_relationship_added = 'Constrained-By Relationship Added';
+$s_email_notification_title_for_action_constrained_by_relationship_deleted = 'Constrained-By Relationship Deleted';
+$s_rel_constrains = 'constrains';
+$s_email_notification_title_for_action_constrains_relationship_added = 'Constrains Relationship Added';
+$s_email_notification_title_for_action_constrains_relationship_deleted = 'Constrains Relationship Deleted';
+#CodevTT_END
+
+
+# Es folgen die unsere projekt- und sprachspezifischen Änderungen...
+# Vorbereitung zum Ausschließen der Entwicklungsprojekte - auskommentiert.
+# Zum Aktivieren der Funktion alle Doppel-# (##) entfernen
+# Zuerst das aktuelle Projekt speichern
+##$t_currentproject = helper_get_current_project();
+# Jetzt die sprachabhängigen Änderungen
+if ( lang_get_current() === 'german' ) {
+	$s_status_enum_string = '10:neu,20:in Klärung,30:in Bearbeitung,40:bestätigt,50:Issue-Behebung,80:behoben,85:behoben und in Test,90:geschlossen';
+
+	$s_access_levels_enum_string = '10:Betrachter,25:Reporter,30:QS-Reporter,40:Tester,50: Entwickler vor Ort,55:Entwickler,70:Manager,90:Administrator';
+
+	# bug_assign.php
+#	$s_bug_assign_msg = 'Das Issue wurde zugewiesen...';
+
+	# bug_change_status_page.php
+#	$s_new_bug_title = 'Neues Issue';
+#	$s_new_bug_button = 'Neues Issue';
+	$s_feedback_bug_title = 'Rückmeldung zum Eintrag machen';
+	$s_feedback_bug_button = 'Rückmeldung zum Eintrag machen';
+	$s_acknowledged_bug_title = 'Eintrag bearbeiten';
+	$s_acknowledged_bug_button = 'Eintrag bearbeiten';
+	$s_confirmed_bug_title = 'Eintrag bestätigen';
+	$s_confirmed_bug_button = 'Eintrag bestätigen';
+	$s_assigned_bug_title = 'Eintrag beheben';
+	$s_assigned_bug_button = 'Eintrag beheben';
+	#$s_in_test_bug_title = 'Eintrag auf in Test setzen';
+	$s_in_test_bug_title = 'Eintrag auf behoben und in Test setzen'; //LB/BFE 2015 geändert https://issuetracking.bfe.tv/view.php?id=18091
+	#$s_in_test_bug_button = 'Eintrag auf in Test setzen';
+	$s_in_test_bug_button = 'Eintrag auf behoben in Test setzen'; //LB/BFE 2015 geändert https://issuetracking.bfe.tv/view.php?id=18091
+
+	# bug_close.php
+#	$s_bug_close_msg = 'Das Issue wurde geschlossen...';
+#	$s_close_immediately   = 'Sofort schließen:';
+	# bug_close_page.php
+#	$s_closed_bug_title = 'Issue schließen';
+	# bug_delete.php
+#	$s_bug_deleted_msg = 'Issue wurde gelöscht...';
+
+	# bug_delete_page.php
+#	$s_delete_bug_sure_msg = 'Soll dieses Issue wirklich gelöscht werden?';
+#	$s_delete_bug_button = 'Issue löschen';
+
+	# bug_monitor.php
+#	$s_monitor_bug_button = 'Issue beobachten';
+
+	# bug_resolve_page.php
+#	$s_resolved_bug_title = 'Issue als behoben markieren';
+#	$s_resolved_bug_button = 'Issue als behoben markieren';
+
+	# login_page.php
+#	$s_login_error = 'Der eingegebene Benutzer/das eingegebene Passwort ist falsch oder Ihr Konto ist deaktiviert oder gesperrt (aufgrund von zu vielen fehlgeschlagenen Anmeldeversuchen).';
+
+	# Custom Fields
+	$s_Applikation_Service = 'Applikation/Service';
+	$s_Vorgaengerprozess_Voraussetzung = 'Vorgängerprozess/Voraussetzung';
+	$s_Aufgetreten_am = 'Aufgetreten am';
+	$s_Aufgetreten_um = 'Aufgetreten um';
+	$s_Wiedervorlage_am = 'Wiedervorlage am';
+	$s_Zu_erledigen_bis = 'Zu erledigen bis';
+	$s_Besprechung_am = 'Besprechung am';
+	$s_Kostentraeger = 'Kostenträger';
+
+	# email Notifications mit BFE-Anpassungen
+	$s_email_notification_title_for_status_bug_acknowledged = 'Der folgende Eintrag ist in Bearbeitung.';
+	$s_email_notification_title_for_status_bug_assigned = 'Der folgende Eintrag ist in Behebung.';
+	$s_email_notification_title_for_status_bug_resolved = 'Der folgende Eintrag wurde behoben.';
+	$s_verify_change_password = 'Sie müssen hier ein Passwort vergeben, um sich wieder anmelden zu können. Bitte merken Sie sich auch Ihren Benutzernamen, weil Sie sich im Anschluss noch einmal anmelden müssen.';
+
+	# email notification string for new status bug in test
+	$s_email_notification_title_for_status_bug_in_test = 'Der folgende Eintrag wurde behoben und ist nun zu testen.';
+
+}
+
+if ( lang_get_current() === 'english' ) {
+	$s_status_enum_string = '10:new,20:feedback requested,30:in process,40:confirmed,50:issue solving,80:resolved,85:resolved and in test,90:closed';
+
+	$s_access_levels_enum_string = '10:viewer,25:reporter,30:qa-reporter,40:updater,50:onsite developer,55:developer,70:manager,90:administrator';
+/*	# bug_change_status_page.php
+	$s_acknowledged_bug_title = 'Set Issue to In Process';
+	$s_acknowledged_bug_button = 'Set Issue to In Process';
+	$s_assigned_bug_title = 'Solve Issue';
+	$s_assigned_bug_button = 'Solve Issue';
+*/	
+	#$s_in_test_bug_title = 'Set Issue to in Test';
+	$s_in_test_bug_title = 'Set Issue to resolved and in Test'; //LB/BFE 2015 geändert https://issuetracking.bfe.tv/view.php?id=18091
+	#$s_in_test_bug_button = 'Set Issue to in Test';
+	$s_in_test_bug_button = 'Set Issue to resolved and in Test';
+
+	# Custom Fields
+	$s_Raum = 'Room';
+	$s_Arbeitsplatz = 'Workplace';
+	$s_Rechner = 'Workstation';
+	$s_Applikation_Service = 'Application/Service';
+	$s_Vorgaengerprozess_Voraussetzung = 'Previous Process/Precondition';
+	$s_Prozess = 'Process';
+	$s_Aufgetreten_am = 'Date Of Occurrence';
+	$s_Aufgetreten_um = 'Time Of Occurence';
+	$s_Wiedervorlage_am = 'Re-Submission on';
+	$s_Zu_erledigen_bis = 'To be solved until';
+	$s_Fehlerklasse = 'Failure Class';
+	$s_Besprechung_am = 'Discussion on';
+
+	# email Notifications mit BFE-Anpassungen
+	$s_email_notification_title_for_status_bug_acknowledged = 'DThe following issue is being worked on.';
+	$s_email_notification_title_for_status_bug_assigned = 'The following issue is confirmed and in resolution.';
+	$s_email_notification_title_for_status_bug_resolved = 'The following issue has been resolved.';
+	$s_verify_change_password = 'You must set a password here to allow you to log in again. Please remember also your user name because you will have to log in right after this.';
+
+	# email notification string for new status bug in test
+	$s_email_notification_title_for_status_bug_in_test = 'The following issue has been RESOLVED and needs to be tested.';
+}
+?><?php
+	if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'pluginmanager' . DIRECTORY_SEPARATOR . 'lang_inc.php' ) ) {
+		require( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'pluginmanager' . DIRECTORY_SEPARATOR . 'lang_inc.php' );
+		global $g_plugins_manager_lang;
+		$g_plugins_manager_lang = ON;
+	}
+?>

@@ -1,0 +1,577 @@
+<?php
+	# Mantis - a php based bugtracking system
+	# Copyright (C) 2000 - 2002  Kenzaburo Ito - kenito@300baud.org
+	# Copyright (C) 2002 - 2005  Mantis Team   - mantisbt-dev@lists.sourceforge.net
+	# This program is distributed under the terms and conditions of the GPL
+	# See the README and LICENSE files for details
+
+	# --------------------------------------------------------
+	# $Id: config_inc.php.sample,v 1.16.14.1 2006/10/29 00:34:44 vboctor Exp $
+	# --------------------------------------------------------
+
+	# This sample file contains the essential files that you MUST
+	# configure to your specific settings.  You may override settings
+	# from config_defaults_inc.php by assigning new values in this file
+
+	# Rename this file to config_inc.php after configuration.
+
+	###########################################################################
+	# WK/BFE Anmerkungen:							  #
+	#									  #
+	# Alle Änderungen in dieser Datei überschreiben die Voreinstellungen aus  #
+	# der config_defaults_inc.php.						  #
+	# Alle Kapitelüberschrift wurden von dort übernommen. Wenn ein neues	  #
+	# Kapitel aufgemacht wird, bitte die Kapitelüberschrift ebenfalls über-	  #
+	# nehmen.								  #
+	# WICHTIG: Die Zahl in den Kapitelüberschriften ist die Zeilennummer im	  #
+	# Original. Bei neuen Kapiteln bitte eintragen.				  #
+	# Bitte Original-Reihenfolge der Kapitel beibehalten.			  #
+	###########################################################################
+
+
+	###########################################################################
+	# 14 CONFIGURATION VARIABLES
+	###########################################################################
+
+	# In general the value OFF means the feature is disabled and ON means the
+	# feature is enabled.  Any other cases will have an explanation.
+
+	# Look in http://manual.mantisbt.org/ or config_defaults_inc.php for more
+	# detailed comments.
+
+	################################
+	# 36 Mantis Database Settings
+	################################
+
+	# --- database variables ---------
+
+	# set these values to match your setup
+
+	# WK: NEUE DB
+	$g_hostname      = "localhost";
+	$g_db_username   = "mantis";
+	$g_db_password   = "mantis";
+	$g_database_name = "bugtracker";
+	$g_db_type       = "mysql";
+
+	############################
+	# 80 Mantis Path Settings
+	############################
+
+	# --- path variables --------------
+
+        # Used to link to manual for User Documentation.
+        $g_manual_url = 'http://manual.mantisbt.org/';
+
+	#############################
+	# 270 Signup and Lost Password
+	#############################
+
+	/**
+	 * absolute path (with trailing slash!) to folder which contains your TrueType-Font files
+	 * used to create the captcha image and since 0.19.3 for the Relationship Graphs
+	 * @global string $g_system_font_folder
+	 */
+//	$g_use_jpgraph = ON;
+//	$g_jpgraph_path = '/var/www/mantis-1.2.2/jpgraph-3.0.7/src/';
+	$g_system_font_folder	= '/usr/share/fonts/truetype/';
+
+	/**
+	 * font name used to create the captcha image. i.e. arial.ttf
+	 * (the font file has to exist in the system_font_folder)
+	 * @global string $g_font_per_captcha
+	 */
+	$g_font_per_captcha	= 'DejaVuSans.ttf';
+
+        # --- signup ----------------------
+
+        # allow users to signup for their own accounts.
+        # Mail settings must be correctly configured in order for this to work
+        $g_allow_signup                 = OFF;
+
+	#############################
+	# 346 Mantis Email Settings
+	#############################
+
+	# --- email variables -------------
+	$g_administrator_email  = 'wkarl@bfe.tv';
+	$g_webmaster_email      = 'wkarl@bfe.tv';
+
+        /**
+        * the sender name, part of 'From: ' header in emails
+	* @global string $g_from_name
+	*/
+	$g_from_name                    = 'BFE Issue Tracking Testinstallation';
+
+	# the "From: " field in emails                                   	
+	$g_from_email           = 'noreply@bfe.tv';
+
+	# the return address for bounced mail
+	$g_return_path_email    = 'wkarl@bfe.tv';
+
+	# Whether user's should receive emails for their own actions
+	#$g_email_receive_own	= ON;
+
+	/**
+	 * set to OFF to disable email check
+	 * @global int $g_validate_email
+	 */
+	$g_validate_email		= OFF;
+
+	################################
+	# 617 Mantis Language Settings
+	################################
+
+        # --- language settings -----------
+
+        # If the language is set to 'auto', the actual
+        # language is determined by the user agent (web browser)
+        # language preference.
+        $g_default_language             = 'german';
+
+        # Fallback for automatic language selection
+        $g_fallback_language    = 'german';
+
+        /**
+	* list the choices that the users are allowed to choose
+	* @global array $g_language_choices_arr
+	*/
+	$g_language_choices_arr = array(
+		'english',
+		'german'
+		);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+	###############################
+	# 739 Mantis Display Settings
+	###############################
+
+        # --- sitewide variables ----------
+        $g_window_title                 = 'BFE Issue Tracking System';	# browser window title
+        $g_page_title                   = 'BFE Issue Tracking Produktivsystem';    # title at top of html page (e
+
+	# --- advanced views --------------
+	# BOTH, SIMPLE_ONLY, ADVANCED_ONLY
+//	$g_show_report			= ADVANCED_ONLY;
+//	$g_show_update			= ADVANCED_ONLY;
+//	$g_show_view			= ADVANCED_ONLY;
+
+	# -- show users with their real name or not
+	$g_show_realname = ON;
+	$g_differentiate_duplicates = OFF;  # leave off for now
+
+        /**
+	* show product versions in create, view and update screens
+	* ON forces display even if none are defined
+	* OFF suppresses display
+	* AUTO suppresses the display if there are no versions defined for the project
+	* @global int $g_show_product_version
+	*/
+        $g_show_product_version = OFF;
+
+	# -- sorting for names in dropdown lists. If turned on, "Jane Doe" will be sorted with the "D"s
+	$g_sort_by_last_name = ON;
+
+	/**
+	 * show projects when in All Projects mode
+	 * @global int $g_show_bug_project_links
+	 */
+	$g_show_bug_project_links	= ON;
+
+	/**************************
+	 * 1050 Mantis TimeZone Settings *
+	 **************************/
+
+	/**
+	 * Default timezone to use in mantis.
+	 * See http://us.php.net/manual/en/timezones.php
+	 * for a list of valid timezones.
+	 * Note: if this is left blank, we use the result of
+	 * date_default_timezone_get() i.e. in order:
+	 * 1. Reading the TZ environment variable (if non empty)
+	 * 2. Reading the value of the date.timezone php.ini option (if set)
+	 * 3. Querying the host operating system (if supported and allowed by the OS)
+	 * 4. If none of the above succeed, will return a default timezone of UTC.
+	 * @global string $g_default_timezone
+	 */
+	$g_default_timezone = 'Europe/Berlin';
+
+	############################
+	# 1084 Mantis Date Settings
+	############################
+
+        # --- date format settings --------
+        # date format strings (default is 'US' formatting)
+        # go to http://www.php.net/manual/en/function.date.php
+        # for detailed instructions on date formatting
+        $g_short_date_format    = 'Y-m-d';
+        $g_normal_date_format   = 'Y-m-d H:i';
+        $g_complete_date_format = 'Y-m-d H:i T';
+
+	############################
+	# 1078 Mantis News Settings
+	############################
+
+	/**
+	 * Indicates whether the news feature should be enabled or disabled.
+	 * This feature is deprecated and is expected to be moved to a plugin
+	 * in the future.
+	 */
+	$g_news_enabled			= ON;
+
+	# threshold for viewing private news
+	$g_private_news_threshold	= 'ONSITE DEVELOPER';
+
+	##################################
+	# 1182 Mantis Default Preferences
+	##################################
+
+	# Default Bug View Status (VS_PUBLIC or VS_PRIVATE)
+	$g_default_bug_view_status = VS_PUBLIC;
+
+	/**
+	 * Default relationship between a new bug and its parent when cloning it
+	 * @global int $g_default_bug_relationship_clone
+	 */
+	$g_default_bug_relationship_clone = BUG_BLOCKS;
+
+	/**********************************
+	 * 1369 MantisBT Summary Settings *
+	 **********************************/
+
+	/**
+	 * shows project '[project] category' when 'All Projects' is selected
+	 * otherwise only 'category name'
+	 * @global int $g_summary_category_include_project
+	 */
+	$g_summary_category_include_project	= OFF;
+
+	/******************************
+	 * 1459 Mantis Reminder Settings *
+	 ******************************/
+
+	/**
+	 * The minimum access level required to show up in the list of users who can receive a reminder.
+	 * The access level is that of the project to which the issue belongs.
+	 * @global int $g_reminder_receive_threshold
+	 */
+	$g_reminder_receive_threshold = REPORTER;
+
+	###################################
+	# 1609 Mantis File Upload Settings
+	###################################
+
+	# --- file upload settings --------
+	# This is the master setting to disable *all* file uploading functionality
+	#
+	# The default value is ON but you must make sure file uploading is enabled
+	#  in PHP as well.  You may need to add "file_uploads = TRUE" to your php.ini.
+	$g_allow_file_upload	= ON;
+
+        # Upload destination: specify actual location in project settings
+	# DISK, DATABASE, or FTP.
+	$g_file_upload_method   = DISK;
+                        
+	# When using FTP or DISK for storing uploaded files, this setting control 
+	# the access permissions they will have on the web server: with the default
+	# value (0400) files will be read-only, and accessible only by the user
+	# running the apache process (probably "apache" in Linux and "Administrator"
+	# in Windows).
+	# For more details on unix style permissions:
+	# http://www.perlfect.com/articles/chmod.shtml
+	$g_attachments_file_permissions = 0666;
+
+	/**
+	 * absolute path to the default upload folder.  Requires trailing / or \
+	 * @global string $g_absolute_path_default_upload_folder
+	 */
+	$g_absolute_path_default_upload_folder = 'files/';
+
+	/************************
+	 * 1796 Status Settings *
+	 ************************/
+
+	/**
+	 * When a note is added to a bug currently in $g_bug_feedback_status, and the note
+	 * author is the bug's reporter, this option will automatically set the bug status
+	 * to $g_bug_submit_status or $g_bug_assigned_status if the bug is assigned to a
+	 * developer.  Defaults to enabled.
+	 * @global boolean $g_reassign_on_feedback
+	 */
+	$g_reassign_on_feedback = OFF;
+
+	############################
+	# 1998 Mantis Misc Settings
+	############################
+
+	# --- access level thresholds (*_threshold) ---
+
+	# access level needed to be able to be listed in the assign to field.
+	$g_handle_bug_threshold			= REPORTER;
+
+	/**
+	 * access level needed to show the Assign To: button bug_view*_page or
+	 *  the Assigned list in bug_update*_page.
+	 *  This allows control over who can route bugs
+	 * This defaults to $g_handle_bug_threshold
+	 * @global int $g_update_bug_assign_threshold
+	 */
+	$g_update_bug_assign_threshold			= REPORTER;
+
+	# threshold for viewing changelog BFE/WK: da leer, zurzeit nichts anzeigen.
+	$g_view_changelog_threshold = 99;
+
+	# Threshold needed to be able to create stored queries
+	$g_stored_query_create_threshold = REPORTER;
+
+	# access level needed to send a reminder from the bug view pages
+	# set to NOBODY to disable the feature
+	$g_bug_reminder_threshold		= REPORTER;
+
+	/**
+	 * Access level needed to add other users to the list of users monitoring
+	 * a bug.
+	 * Look in the constant_inc.php file if you want to set a different value.
+	 * @global int $g_monitor_add_others_bug_threshold
+	 */
+	$g_monitor_add_others_bug_threshold = MANAGER;
+
+	/**
+	 * threshold for viewing roadmap
+	 * @global int $g_roadmap_view_threshold
+	 */
+	$g_roadmap_view_threshold = MANAGER;
+
+	/**
+	 * threshold for updating roadmap, target_version, etc
+	 * @global int $g_roadmap_update_threshold
+	 */
+	$g_roadmap_update_threshold = MANAGER;
+
+	/**
+	 * access level needed to view private bugnotes
+	 * Look in the constant_inc.php file if you want to set a different value
+	 * @global int $g_private_bugnote_threshold
+	 */
+	$g_private_bugnote_threshold	= 'ONSITE DEVELOPER';
+
+	################################
+	# 2528 Mantis Look and Feel Variables
+	################################
+
+	# --- status color codes ----------
+	#
+	$g_status_colors		= array( 'new'	=> '#ffa0a0', # red,
+							 'feedback'	=> '#ffbb78', # orange
+							 'acknowledged'	=> '#ffd850', # orange-yellow
+							 'confirmed'	=> '#ffffb0', # yellow
+							 'assigned'	=> '#c8c8ff', # blue
+							 'resolved'	=> '#cceedd', # greenish
+							 'in test'	=> '#ffccff', # magentaish
+							 'closed'	=> '#e8e8e8'); # light gray
+
+	###############################
+	# 2577 Mantis Cookie Variables
+	###############################
+
+        # --- cookie prefix ---------------
+        # set this to a unique identifier.  No spaces.
+	$g_cookie_prefix                = 'BFE_ITS';
+
+	#######################################
+	# 2644 Mantis Filter Variables
+	#######################################
+	$g_filter_by_custom_fields = ON;
+	$g_filter_custom_fields_per_row = 8;
+	# WK: Test ohne $g_view_filters = ADVANCED_ONLY;
+
+	/**
+	 * The threshold required for users to be able to create permalinks.  To turn of this feature use NOBODY.
+	 * @global int $g_create_permalink_threshold
+	 */
+	$g_create_permalink_threshold = MANAGER;
+
+	###########################
+	# 2741 Mantis Enum Strings
+	###########################
+
+	# --- enum strings ----------------
+	# status from $g_status_index-1 to 79 are used for the onboard customization (if enabled)
+	# directly use Mantis to edit them.
+	$g_access_levels_enum_string		= '10:viewer,25:reporter,30:qa-reporter,40:updater,50:onsite developer,55:developer,70:manager,90:administrator';
+	$g_status_enum_string				= '10:new,20:feedback,30:acknowledged,40:confirmed,50:assigned,80:resolved,85:in test,90:closed';
+
+	###########################
+	# 2869 Include files
+	###########################
+
+	# Specify your top/bottom include file (logos, banners, etc)
+	# if a top file is supplied, the default Mantis logo at the top will be hidden
+	$g_bottom_include_page			= '%absolute_path%';
+	$g_top_include_page			= '%absolute_path%plugins/BFEplugin/pages/bfe_top_page.php';
+	# meta tags
+	$g_meta_include_file			= '%absolute_path%meta_inc.php';
+
+	/**
+	* CSS file
+	* @global string $g_css_include_file
+	*/
+	$g_css_include_file                             = '';
+
+	##################
+	# 3343 My View Settings
+	##################
+
+	# Default page after Login or Set Project
+	#$g_default_home_page = 'my_view_page.php';
+	$g_default_home_page = 'main_page.php';
+
+	/*************
+	 * RSS Feeds *
+	 *************/
+
+	/**
+	 * This flag enables or disables RSS syndication.  In the case where RSS syndication is not used,
+	 * it is recommended to set it to OFF.
+	 * @global int $g_rss_enabled
+	 */
+	$g_rss_enabled = OFF;
+
+
+	/*********************
+	 * 3397 Bug Relationships *
+	 *********************/
+
+	/**
+	 * Enable relationship graphs support.
+	 * Show issue relationships using graphs.
+	 *
+	 * In order to use this feature, you must first install either GraphViz
+	 * (all OSs except Windows) or WinGraphviz (only Windows).
+	 *
+	 * Graphviz homepage:    http://www.research.att.com/sw/tools/graphviz/
+	 * WinGraphviz homepage: http://home.so-net.net.tw/oodtsen/wingraphviz/
+	 *
+	 * Refer to the notes near the top of core/graphviz_api.php and
+	 * core/relationship_graph_api.php for more information.
+	 * @global int $g_relationship_graph_enable
+	 */
+	$g_relationship_graph_enable		= OFF;
+
+	/**
+	 * Font name and size, as required by Graphviz. If Graphviz fails to run
+	 * for you, you are probably using a font name that gd can't find. On
+	 * Linux, try the name of the font file without the extension.
+	 * @global string $g_relationship_graph_fontname
+	 */
+	$g_relationship_graph_fontname		= 'Arial';
+
+	/**
+	 *
+	 * @global int $g_relationship_graph_fontsize
+	 */
+	$g_relationship_graph_fontsize		= 8;
+
+	/**
+	 * Default dependency orientation. If you have issues with lots of childs
+	 * or parents, leave as 'horizontal', otherwise, if you have lots of
+	 * "chained" issue dependencies, change to 'vertical'.
+	 * @global string $g_relationship_graph_orientation
+	 */
+	$g_relationship_graph_orientation	= 'horizontal';
+
+	/**
+	 * Max depth for relation graphs. This only affects relation graphs,
+	 * dependency graphs are drawn to the full depth. A value of 3 is already
+	 * enough to show issues really unrelated to the one you are currently
+	 * viewing.
+	 * @global int $g_relationship_graph_max_depth
+	 */
+	$g_relationship_graph_max_depth		= 2;
+
+	/**
+	 * If set to ON, clicking on an issue on the relationship graph will open
+	 * the bug view page for that issue, otherwise, will navigate to the
+	 * relationship graph for that issue.
+	 *
+	 * @global int $g_relationship_graph_view_on_click
+	 */
+	$g_relationship_graph_view_on_click	= ON;
+
+	/**
+	 * Complete path to dot and neato tools. Your webserver must have execute
+	 * permission to these programs in order to generate relationship graphs.
+	 * NOTE: These are meaningless under Windows! Just ignore them!
+	 * @global string $g_dot_tool
+	 */
+	$g_dot_tool							= '/usr/bin/dot';
+	/**
+	 * Complete path to dot and neato tools. Your webserver must have execute
+	 * permission to these programs in order to generate relationship graphs.
+	 * NOTE: These are meaningless under Windows! Just ignore them!
+	 * @global string $g_neato_tool
+	 */
+	$g_neato_tool						= '/usr/bin/neato';
+
+        /****************************
+        * 3543 Profile Related Settings *
+        ****************************/
+
+	/**
+	* Enable Profiles
+	* @global int $g_enable_profiles
+	*/
+	$g_enable_profiles = OFF;
+
+	/********************
+	 * 3562 Bug Tagging *
+	 ********************/
+
+	/**
+	 * String that will separate tags as entered for input
+	 * @global int $g_tag_separator
+	 */
+	$g_tag_separator = ',';
+
+	/**
+	 * Access level required to view tags attached to a bug
+	 * @global int $g_tag_view_threshold
+	 */
+	$g_tag_view_threshold = MANAGER;
+
+	/**
+	 * Access level required to attach tags to a bug
+	 * @global int $g_tag_attach_threshold
+	 */
+	$g_tag_attach_threshold = MANAGER;
+
+	/**
+	 * Access level required to detach tags from a bug
+	 * @global int $g_tag_detach_threshold
+	 */
+	$g_tag_detach_threshold = MANAGER;
+
+	/**
+	 * Access level required to detach tags attached by the same user
+	 * @global int $g_tag_detach_own_threshold
+	 */
+	$g_tag_detach_own_threshold = MANAGER;
+
+	/**
+	 * Access level required to create new tags
+	 * @global int $g_tag_create_threshold
+	 */
+	$g_tag_create_threshold = MANAGER;
+
+	/**
+	 * Access level required to edit tag names and descriptions
+	 * @global int $g_tag_edit_threshold
+	 */
+	$g_tag_edit_threshold = MANAGER;
+
+	/**
+	 * Access level required to edit descriptions by the creating user
+	 * @global int $g_tag_edit_own_threshold
+	 */
+	$g_tag_edit_own_threshold = MANAGER;
+
+?>

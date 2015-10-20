@@ -1,0 +1,174 @@
+<?php
+
+/**
+ * BFE Plugin
+ * @package BFEPlugin
+ * @subpackage MantisPlugin
+ * @copyright Copyright (C) 2010 - 2015  WK/BFE
+ * @link http://www.mantisbt.org
+ */
+
+/**
+ * requires MantisPlugin.class.php
+ */
+require_once( config_get( 'class_path' ) . 'MantisPlugin.class.php' );
+
+/**
+ * BFEPlugin Class
+ */
+class BFEpluginPlugin extends MantisPlugin {
+
+    function register() {
+        $this->name = 'BFE-Plugin für Mantis';		# Proper name of plugin
+        $this->description = 'BFE-Erweiterungen';	# Short description of the plugin
+        $this->page = '';           			# Default plugin page
+
+        $this->version = '0.3';     			# Plugin version string LB/BFE 2015: auf Version 0.3 erhöht, geändert: Anzeige von BFE-CSS auch auf Fehlermeldungsseiten
+        $this->requires = array(			# Plugin dependencies, array of basename => version pairs
+            'MantisCore' => '1.2',			# Should always depend on an appropriate version of MantisBT
+            );
+
+        $this->author = 'Werner Karl/BFE';		# Author/team name
+        $this->contact = 'wkarl@bfe.tv';		# Author/team e-mail address
+        $this->url = 'http://www.bfe.tv';		# Support webpage
+    }
+
+    /**
+    * Event hook declaration.
+    */
+    function hooks() {
+        return array(
+            'EVENT_LAYOUT_RESOURCES'	=> 'bfeheader',		# BFE-Header
+			#'EVENT_REPORT_BUG_DATA'	=> 'bfeheader',		# BFE-Header LB/BFE 2015
+            'EVENT_LAYOUT_BODY_END'	=> 'bfefooter',		# BFE-Footer
+            'EVENT_VIEW_BUGNOTE'	=> 'bfebugnote',	# Bugnote-Zusaetze
+
+//	    'EVENT_REPORT_BUG_FORM'	=> 'bfeclonebug'	# Setzt beim 'Bug in anderes Projekt klonen' die Project-ID richtig
+        );
+    }
+
+    /*
+    * Funktion bfeheader()
+    * Fuegt zwei zusaetzliche Stylesheets MIT title ein, damit sie auswaehlbar sind
+    * Auf der Seite 'view.php' wird der Style tr.spacer auf display: none; gesetzt.
+    * Hierdurch werden alle Spacer-Zeilen nicht mehr dargestellt.
+    * Die Funktion bfebugnote gibt aber eigene Spacer-Zeilen aus, die je nach Stylesheet
+    * sichtbar oder unsichtbar sind (public vs. private Notizen).
+    */
+    function bfeheader() {
+    	global $o_id;
+    	
+        if ( "/view.php" == $_SERVER['PHP_SELF'] ) {
+            $t_add_css = "\t<style type=\"text/css\"><!-- tr.spacer { display: none; } --></style>";
+        } else {
+            $t_add_css = "";
+        }
+        return 	'	<!-- Beginn BFE-Header -->' . "\n" .
+          '	<link rel="stylesheet" type="text/css" title="vorort" href="/css/vorort.css" />' . "\n" .
+          '	<link rel="stylesheet" type="text/css" title="bfe" href="/css/bfe.css" />' . "\n" .
+          $t_add_css .
+          '	<!-- Ende BFE-Header -->' . "\n";
+    }
+    
+    /*
+    * Funktion bfefooter()
+    * wird nur auf der Seite 'view.php' ausgegeben.
+    * Falls dieser Seite eine 'bugnote_id' uebergeben wird, wird der Inhalt dieser
+    * Notiz in die Textarea 'bugnote_text' eingetragen. Hiermit wird eine Notiz aus einem
+    * anderen Issue geklont.
+    */
+    function bfefooter() {
+        if ( "/view.php" == $_SERVER['PHP_SELF'] ) {
+            $t_bugnote_add_text = str_replace(array("\n","\r"),array('\n','\r'),bugnote_get_text(gpc_get('bugnote_id', '')));
+            if ( $t_bugnote_add_text ) {
+                return '<!-- Beginn BFE-Footer -->' . "\n" .
+                      '<script type="text/javascript">' . "\n" .
+                      '	document.getElementsByName("bugnote_text")[0].value="' . $t_bugnote_add_text . '";' . "\n" .
+                      '</script>' . "\n" .
+                      '<!-- Ende BFE-Footer -->' . "\n";
+            }
+        }
+    }
+
+    /*
+    * Funktion bfebugnote(event, bug_id, bugnote_it, bugnote_is_private)
+    * Fuegt einer Notiz einen Link hinzu ueber den die Notiz in ein verwandtes Issue geklont
+    * werden kann.
+    * Aber nur, falls das Issue nicht readonly ist und der Benutzer ausreichenden Zugriff hat.
+    * Es werden neue CSS-Klassen benutzt, damit diese über das 'vorort' Stylesheet ausgeblendet
+    * werden koennen.
+    */
+    function bfebugnote( $t_event, $t_bug_id, $t_bugnote_id, $t_bugnote_is_private ) {
+		if ( $t_bugnote_is_private ) {
+		        # WK: zwei neue CSS-Klassen für unsere zusätzlichen Links
+			$t_bugnote_bfe_css	= 'bugnote-bfe-private';
+			$t_spacer_bfe_css	= 'spacer-bfe-private';
+		} else {
+		        # WK: zwei weitere CSS-Klassen für unsere zusätzlichen Links
+			$t_bugnote_bfe_css	= 'bugnote-bfe-public';
+			$t_spacer_bfe_css	= 'spacer-bfe-public';
+		}
+
+		# Mod WK/BFE: Diese Links sind die neue BFE-Funktion Notiz klonen. Nur ab Recht 'Projekte bearbeiten' oder ab Rolle 'Entwickler vor Ort'
+		if ( !bug_is_readonly( $t_bug_id ) ) {
+		    if ( ( access_has_bug_level( config_get( 'manage_project_threshold' ), $t_bug_id ) ) || access_has_project_level( 50 ) ) {
+			$t_src = relationship_get_all_src( $t_bug_id );
+			$t_src_count = count($t_src);
+			$t_dest = relationship_get_all_dest( $t_bug_id );
+			$t_dest_count = count($t_dest);
+			if ( $t_src_count || $t_dest_count ) {
+			    echo '<tr class="row-1">';
+			    echo '	<td class="' . $t_bugnote_bfe_css .'" colspan="2">';
+				# Zunächst die Destination Bug IDs
+				for ( $z = 0 ; $z < $t_src_count ; $z++ ) {
+					$t_thisbugid = $t_src[$z]->dest_bug_id;
+					$t_thisbugsumm = bug_get_field( $t_thisbugid, 'summary' );
+					$t_thisprojectid = bug_get_field( $t_thisbugid, 'project_id' );
+					echo '<a href="view.php?id='.$t_thisbugid.'&bugnote_id='.$t_bugnote_id.'#bugnotes">';
+					echo "Notiz klonen in Issue ";
+					echo bug_format_id( $t_thisbugid ).': '.$t_thisbugsumm.' ['.project_get_field( $t_thisprojectid, 'name' ).']</a><br />';
+				}
+				# und jetzt die Source Bug IDs
+				for ( $z = 0 ; $z < $t_dest_count ; $z++ ) {
+					$t_thisbugid = $t_dest[$z]->src_bug_id;
+					$t_thisbugsumm = bug_get_field( $t_thisbugid, 'summary' );
+					$t_thisprojectid = bug_get_field( $t_thisbugid, 'project_id' );
+					echo '<a href="view.php?id='.$t_thisbugid.'&bugnote_id='.$t_bugnote_id.'#bugnotes">';
+					echo "Notiz klonen in Issue ";
+					echo bug_format_id( $t_thisbugid ).': '.$t_thisbugsumm.' ['.project_get_field( $t_thisprojectid, 'name' ).']</a><br />';
+				}
+                            echo '	</td>';
+                            echo '</tr>';
+			}
+                    }
+                }
+                echo '<tr class="' . $t_spacer_bfe_css . '" />';
+     }
+    
+    /*
+    * Funktion bfeclonebug()
+    * Ändert die Project-ID auf die Current ID und macht damit früheres Ignorieren
+    * der Project-ID rückgängig. Somit wird, entgegen den Bemerkungen im Quelltext,
+    * in das gerade ausgewählte Projekt geklont.
+    * Erreicht wird das, in dem die globale Variable $g_project_override auf null
+    * gesetzt wird. Hierdurch liefert helper_get_current_project wieder das aktuelle
+    * Projekt. Da das noch immer nicht hilft, wird im bfeheader die Variable $o_id
+    * gesetzt und hier wieder verwendet.
+    */
+	
+	
+    function bfeclonebug() {
+    	global $o_id;
+
+    	if ( "/bfe_clone_issue_advanced.php" == $_SERVER['PHP_SELF'] || "/bfe_clone_issue.php" == $_SERVER['PHP_SELF'] ) {
+	      $t_changed_project = false;
+	      $g_project_override = helper_get_current_project();
+	      echo "	<!-- Beginn Ausgabe BFE-Plugin Funktion bfeclonebug() -->\n";
+	      echo '	<input type="hidden" name="project_id" value="' . helper_get_current_project() . '" />' . "\n";
+	      echo "	<!-- Ende Ausgabe BFE-Plugin Funktion bfeclonebug() -->\n";
+//	      $f_additional_info = '*** Project: '.project_get_field( $t_bug_data->project_id, 'name' ).'; Original Issue: '.bug_format_id( $f_master_bug_id )." ***\n".$f_additional_info;
+	      $f_additional_info = '*** Project: '.$t_bug_data->project_id.'; Original Issue: '.bug_format_id( $f_master_bug_id )." ***\n".$f_additional_info;	}
+    }
+    
+}
+?>
